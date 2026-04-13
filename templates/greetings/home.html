@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кейс 3 — Django Greeting App</title>
+    <link rel="stylesheet" href="{% static 'greetings/styles.css' %}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero-card">
+            <p class="eyebrow">Кейс-задача № 3</p>
+            <h1>Персонализированное приветствие</h1>
+            <p class="lead">Введите имя, сохраните его в базе данных и получите приветствие на главной странице.</p>
+
+            <form class="greeting-form" method="post" novalidate>
+                {% csrf_token %}
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {{ form.name }}
+
+                {% if form.name.errors %}
+                    <div class="error-box">
+                        {% for error in form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit">Submit</button>
+            </form>
+
+            {% if greeting_name %}
+                <div class="greeting-box">
+                    Здравствуйте, <strong>{{ greeting_name }}</strong>!
+                </div>
+            {% endif %}
+
+            {% if recent_names %}
+                <section class="history">
+                    <h2>Последние сохранённые имена</h2>
+                    <ul>
+                        {% for visitor in recent_names %}
+                            <li>{{ visitor.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>
